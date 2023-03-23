@@ -1,9 +1,11 @@
 # Joshua Erickson | CPSC 491 | Dupligone GUI Homescreen Test using CustomTkinter
 
 import customtkinter as ctk
+from base2test import interfaceSearch
 #import os
-#from PIL import Image # for use with displaying images
+from PIL import Image # for use with displaying images
 
+# Initialize Desktop Application
 class InitApp(ctk.CTk):
 
     def __init__(self, *args, **kwargs):
@@ -41,6 +43,7 @@ class InitApp(ctk.CTk):
         frame = self.frames[page_name]
         frame.tkraise()
 
+# Home Page: will show instructions and button to proceed to file upload
 class HomePage(ctk.CTkFrame):
 
     def __init__(self, parent, controller):
@@ -48,7 +51,7 @@ class HomePage(ctk.CTkFrame):
         self.controller = controller
 
         self.controller.title('Dupligone Home')
-        self.controller.state('zoomed') # purpose unclear atm?
+        self.controller.state('zoomed')
 
         heading_label = ctk.CTkLabel(self,
                                                      text='Dupligone!',
@@ -56,7 +59,20 @@ class HomePage(ctk.CTkFrame):
                                                      )
         heading_label.pack(pady=25)
 
-        # Get Started Function - Progress to File Upload Page. Text placeholder
+        # Home Screen Description 1
+        description_1 = ctk.CTkLabel(self, text="Dupligone! automagically searches folders for copies or duplicates of photos.", font=("Roboto", 24))
+        description_1.pack(pady=25)
+        # Home Screen Description 2
+        description_2 = ctk.CTkLabel(self, text="Using Dupligone! is as simple as...", font=("Roboto", 24))
+        description_2.pack(pady=25)
+        
+        # Import instructional image placeholder
+        instr_image = ctk.CTkImage(Image.open(r"C:\Users\theun\OneDrive\Documents\Dupligone\Assets\testall.png"), size=(657,213))
+        # Home Screen Instructionbox Button
+        instr_button = ctk.CTkButton(self, image=instr_image, width=657, height=213, text='', fg_color="transparent", hover=False)
+        instr_button.pack(pady=25)
+        
+        # Get Started Function - Progress to File Upload Page.
         def getStarted():
             print("Get Started Now == Pressed")
             controller.show_frame('UploadPage')     
@@ -64,21 +80,15 @@ class HomePage(ctk.CTkFrame):
         # edit start button and overhaul page
         start_button = ctk.CTkButton(self,
                                                      text='Get Started Now!',
+                                                     font=("Roboto", 24,'bold'),
                                                      command=getStarted,
-                                                     border_width = 3,
-                                                     width=40,
-                                                     height=3)
+                                                     )
         start_button.pack(pady=10)
 
-        incorrect_password_label = ctk.CTkLabel(self,
-                                                                        text='',
-                                                                        font=('orbitron',13),
-                                                                        anchor='n')
-        incorrect_password_label.pack(fill='both',expand=True)
+        #bottom_frame = ctk.CTkFrame(self,border_width=3)
+        #bottom_frame.pack(fill='x',side='bottom')
 
-        bottom_frame = ctk.CTkFrame(self,border_width=3)
-        bottom_frame.pack(fill='x',side='bottom')
-        
+# Page for browsing folders and uploading files to workspace        
 class UploadPage(ctk.CTkFrame):
 
     def __init__(self, parent, controller):
@@ -86,17 +96,17 @@ class UploadPage(ctk.CTkFrame):
         self.controller = controller
    
         heading_label = ctk.CTkLabel(self,
-                                                     text='SECURITEX ATM',
+                                                     text='Dupligone!',
                                                      font=('orbitron',45,'bold'))
         heading_label.pack(pady=25)
 
         main_menu_label = ctk.CTkLabel(self,
-                                                           text='Main Menu',
+                                                           text='Upload Files',
                                                            font=('orbitron',13))
         main_menu_label.pack()
 
         selection_label = ctk.CTkLabel(self,
-                                                           text='Please make a selection',
+                                                           text='Browse Files',
                                                            font=('orbitron',13),
                                                            anchor='w')
         selection_label.pack(fill='x')
@@ -104,38 +114,14 @@ class UploadPage(ctk.CTkFrame):
         button_frame = ctk.CTkFrame(self)
         button_frame.pack(fill='both',expand=True)
 
-        def withdraw():
-            controller.show_frame('WithdrawPage')
-            
-        withdraw_button = ctk.CTkButton(button_frame,
-                                                            text='Withdraw',
-                                                            command=withdraw,
-                                                            border_width=3,
-                                                            width=50,
-                                                            height=5)
-        withdraw_button.grid(row=0,column=0,pady=5)
+        def testSearch():
+            interfaceSearch()
 
-        def deposit():
-            controller.show_frame('DepositPage')
-            
-        deposit_button = ctk.CTkButton(button_frame,
-                                                            text='Deposit',
-                                                            command=deposit,
-                                                            border_width=3,
-                                                            width=50,
-                                                            height=5)
-        deposit_button.grid(row=1,column=0,pady=5)
-
-        def balance():
-            controller.show_frame('BalancePage')
-            
-        balance_button = ctk.CTkButton(button_frame,
-                                                            text='Balance',
-                                                            command=balance,
-                                                            border_width=3,
-                                                            width=50,
-                                                            height=5)
-        balance_button.grid(row=2,column=0,pady=5)
+        search_button = ctk.CTkButton(button_frame,
+                                                            text='TestSearch',
+                                                            command=testSearch,
+                                                            )
+        search_button.grid(row=0,column=0,pady=5)
 
         def exit():
             controller.show_frame('HomePage')
@@ -143,14 +129,12 @@ class UploadPage(ctk.CTkFrame):
         exit_button = ctk.CTkButton(button_frame,
                                                             text='Exit',
                                                             command=exit,
-                                                            border_width=3,
-                                                            width=50,
-                                                            height=5)
+                                                            )
         exit_button.grid(row=3,column=0,pady=5)
 
 
-        bottom_frame = ctk.CTkFrame(self,border_width=3)
-        bottom_frame.pack(fill='x',side='bottom')
+        #bottom_frame = ctk.CTkFrame(self,border_width=3)
+        #bottom_frame.pack(fill='x',side='bottom')
 
 
 if __name__ == "__main__":
