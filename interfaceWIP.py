@@ -1,7 +1,7 @@
 # Joshua Erickson | CPSC 491 | Dupligone GUI Homescreen Test using CustomTkinter
 
 import customtkinter as ctk
-from base2test import interfaceSearch
+from base2test import interfaceSearch, uploadedFiles
 #import os
 from PIL import Image # for use with displaying images
 
@@ -90,6 +90,8 @@ class HomePage(ctk.CTkFrame):
 
 # Page for browsing folders and uploading files to workspace        
 class UploadPage(ctk.CTkFrame):
+    # end goal: page split into two sections (boxes). Left box contains browse folder button, right box contains preview of uploaded filepaths
+        # may need to implement function that shows browse folders
 
     def __init__(self, parent, controller):
         ctk.CTkFrame.__init__(self, parent)
@@ -100,69 +102,61 @@ class UploadPage(ctk.CTkFrame):
                                      text='Dupligone!',
                                      font=('Roboto',45,'bold'))
         heading_label.pack(pady=25)
-
+        # Sub Header Label for page description
         main_menu_label = ctk.CTkLabel(self,
-                                       text='Upload Files',
-                                       font=('Roboto',13))
+                                       text='Upload Content to Workspace',
+                                       font=('Roboto',20))
         main_menu_label.pack()
 
-        selection_label = ctk.CTkLabel(self,
-                                       text='Browse Files',
-                                       font=('Roboto',13),
-                                       anchor='w')
-        selection_label.pack(fill='x')
 
-        button_frame = ctk.CTkFrame(self)
-        button_frame.pack(fill='both',expand=True)
+        # Frame for left box
+        left_frame = ctk.CTkFrame(self,border_width=3)
+        left_frame.pack(fill="both", side='left', expand=True, padx=70, pady=140)
 
-        def testSearch():
-            #interfaceSearch()
-            print("Test Search == pressed")
-            found_images_dict, found_filepaths_dict = interfaceSearch()
-            
-            #print(found_images_dict)
-            for key, value in found_images_dict.items():
-                print(key, " : ", value)
+        # Function for Browse button to prompt user to upload files
+        def pressedBrowse():
+            print("pressedBrowse == pressed")
+            upload_test = []
+            upload_test = uploadedFiles(upload_test)
+            right_frame.configure(state="normal") # enable editing state of text box
+            for element in upload_test:
+                right_frame.insert("end", element)
+                right_frame.insert("end", "\n")
+            right_frame.configure(state="disabled") # enable editing state of text box
 
-            test_output.configure(state="normal") # enable editing state of text box
-            for value in found_filepaths_dict:
-                print(found_filepaths_dict[value])
-                test_output.insert("end", found_filepaths_dict[value])
-            test_output.configure(state="disabled") # disable editing state after finished writing results
+        search_button = ctk.CTkButton(left_frame,
+                                      text='Browse',
+                                      font=('Roboto',20),
+                                      command=pressedBrowse)
+        search_button.pack(side='bottom', pady=25)
 
-        # Button used to test search algorithm
-        search_button = ctk.CTkButton(button_frame,
-                                      text='TestSearch',
-                                      command=testSearch)
-        search_button.grid(row=0,column=0,pady=5,padx=5)
+        # Textbox Frame for right box
+        right_frame = ctk.CTkTextbox(self,border_width=3, state="disabled", font=('Roboto',16))
+        right_frame.pack(fill="both", side='right', expand=True, padx=70, pady=140)
 
-        # Begin Search button to progress to search results page
-        def gotoSearch():
-            controller.show_frame('SearchPage')
-            print("Search button pressed, moving to SearchPage")
-            
-        goto_search_button = ctk.CTkButton(button_frame,
-                                    text='GotoSearch',
-                                    command=gotoSearch)
-        goto_search_button.grid(row=1,column=0,pady=5,padx=5)
-
-        # Exit button to return to homepage
+        # Function for Exit button to return to homepage
         def exit():
             controller.show_frame('HomePage')
             print("Exit button pressed, returning to homepage")
-            
-        exit_button = ctk.CTkButton(button_frame,
+        # Create Exit button    
+        exit_button = ctk.CTkButton(self,
                                     text='Exit',
+                                    font=('Roboto',15),
                                     command=exit)
-        exit_button.grid(row=2,column=0,pady=5,padx=5)
-
-        bottom_frame = ctk.CTkFrame(self,border_width=3)
-        bottom_frame.pack(fill="both", side='bottom')
+        exit_button.pack(side='bottom', pady=10)
         
-        test_output = ctk.CTkTextbox(bottom_frame, state="disabled")
-        test_output.grid(row=0,column=1,pady=5,padx=5)
-        #test_output.insert("0.0", "Example/Path/Here.png\n" * 10)
-        #test_output.configure(state="disabled")
+        # Function for Search button to progress to search results page
+        def gotoSearch():
+            controller.show_frame('SearchPage')
+            print("Search button pressed, moving to SearchPage")
+        # Create search page button
+        goto_search_button = ctk.CTkButton(self,
+                                    text='Begin Search',
+                                    font=('Roboto',30),
+                                    command=gotoSearch
+                                    )
+        goto_search_button.pack(side='bottom', pady=10, ipadx=2, ipady=2)
+
         
 # Page for searching folders uploaded to workspace        
 class SearchPage(ctk.CTkFrame):
@@ -222,13 +216,11 @@ class SearchPage(ctk.CTkFrame):
         
         exit_button.grid(row=1,column=0,pady=5,padx=5)
 
-        bottom_frame = ctk.CTkFrame(self,border_width=3)
-        bottom_frame.pack(fill="both", side='bottom')
+        test_output = ctk.CTkTextbox(self,border_width=3, state="disabled")
+        test_output.pack(fill="both", side='bottom')
         
-        test_output = ctk.CTkTextbox(bottom_frame, state="disabled")
-        test_output.grid(row=0,column=1,pady=5,padx=5)
-        #test_output.insert("0.0", "Example/Path/Here.png\n" * 10)
-        #test_output.configure(state="disabled")
+        #test_output = ctk.CTkTextbox(bottom_frame, state="disabled")
+        #test_output.grid(row=0,column=1,pady=5,padx=5)
 
 if __name__ == "__main__":
     app = InitApp()
