@@ -8,15 +8,22 @@ import hashlib # for encoding unique hash ID's for scanned files
 
 #Tk().withdraw() # Do not display full GUI, avoid root directory 
 
+# Function that prompts user for working search directory
 def browseFolder():
     path = askdirectory(title="Select base folder to search") # prompt user for base folder to search
     return path
 
+# Function that returns walker iterator
 def walkerFolder(path):
     walker = os.walk(path) # returns a tuple of main filepath, and its contents (subfolders, files)
     return walker
-uniqueImages = dict() # dictionary to contain unique image hash ID's (filehash, filepath)
 
+# Create empty dictionary to populate with duplicate files
+uniqueImages = dict() # dictionary to contain unique image hash ID's (filehash, filepath)
+# To-Do: Test to create empty dictionary to store filepath/files
+foundFiles = dict()
+
+# Function to find duplicates
 def searchDuplicates(path, walker, uniqueImages):
     for folder, sub_folder, files in walker:
         for file in files:
@@ -24,12 +31,17 @@ def searchDuplicates(path, walker, uniqueImages):
             filehash = hashlib.md5(open(filepath, "rb").read()).hexdigest() #convert file into md5 hash-string, read bytes
 
             if filehash in uniqueImages:
-                print(filepath, file)
+                # To-Do: Create variable to store filepath, file (name)
+                #print(filepath, file)
+                foundFiles[filehash] = (filepath, file)
+
                 #os.remove(filepath) # immediately deletes found duplicate
                 #print(f"{filepath} has been deleted")
                 
             else:
                 uniqueImages[filehash] = path
+    
+    return uniqueImages, foundFiles # returned list of duplicates, hash matches
             
 #print(uniqueImages)
 
@@ -37,8 +49,15 @@ def interfaceSearch():
     path = browseFolder()
     walker = walkerFolder(path)
     imagesdict = dict()
+    filepathsdict = dict() # for new feature
 
-    searchDuplicates(path, walker, imagesdict)
+    # create the multiple return topuple decalartion here
+    print(imagesdict)
+    imagesdict, filepathsdict = searchDuplicates(path, walker, imagesdict)
+    #print(imagesdict)
+    return imagesdict, filepathsdict
+
+
 
 
 # Original Base Test Results
