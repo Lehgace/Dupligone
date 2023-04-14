@@ -32,12 +32,12 @@ class InitApp(ctk.CTk):
             self.frames[page_name] = frame
 
             # put all of the pages in the same location;
-            # the one on the top of the stacking order
-            # will be the one that is visible.
+            # top one in stacking order will be visible
             frame.grid(row=0, column=0, sticky="nsew")
 
         self.show_frame("HomePage") # call function to raise a chosen frame so it is visible
 
+    # Function that raises frame for inputed page_name
     def show_frame(self, page_name):
         '''Show a frame for the given page name'''
         frame = self.frames[page_name]
@@ -50,7 +50,8 @@ class HomePage(ctk.CTkFrame):
         ctk.CTkFrame.__init__(self, parent) 
         self.controller = controller
 
-        self.controller.title('Dupligone Home')
+        # Set title and state of Window
+        self.controller.title('Dupligone!')
         self.controller.state('zoomed')
 
         heading_label = ctk.CTkLabel(self,
@@ -85,8 +86,6 @@ class HomePage(ctk.CTkFrame):
                                      )
         start_button.pack(pady=10)
 
-        #bottom_frame = ctk.CTkFrame(self,border_width=3)
-        #bottom_frame.pack(fill='x',side='bottom')
 
 # Page for browsing folders and uploading files to workspace        
 class UploadPage(ctk.CTkFrame):
@@ -160,6 +159,7 @@ class UploadPage(ctk.CTkFrame):
         
 # Page for searching folders uploaded to workspace        
 class SearchPage(ctk.CTkFrame):
+    # Overhaul Layout to Look closer to design concept 
 
     def __init__(self, parent, controller):
         ctk.CTkFrame.__init__(self, parent)
@@ -171,22 +171,29 @@ class SearchPage(ctk.CTkFrame):
                                      font=('Roboto',45,'bold'))
         heading_label.pack(pady=25)
 
-        main_menu_label = ctk.CTkLabel(self,
-                                       text='Search Files',
-                                       font=('Roboto',13))
-        main_menu_label.pack()
+        # header frame for top labels
+        header_frame = ctk.CTkFrame(self,fg_color="transparent")
+        header_frame.pack(fill="x", side='top', padx=5, pady=5)
 
-        selection_label = ctk.CTkLabel(self,
-                                       text='Files Found',
-                                       font=('Roboto',13),
-                                       anchor='w')
-        selection_label.pack(fill='x')
+        duplicates_label = ctk.CTkLabel(header_frame,
+                                       text='Duplicates',
+                                       font=('Roboto',22, 'bold'))
+        duplicates_label.pack(fill="x",side='left',padx=200)
+        image_preview_label = ctk.CTkLabel(header_frame,
+                                       text='Image Preview',
+                                       font=('Roboto',22, 'bold'))
+        image_preview_label.pack(fill="x",side='right',padx=200)
+        
+        # Frame for bottom buttons box
+        bottom_frame = ctk.CTkFrame(self,border_width=2)
+        bottom_frame.pack(fill="x", side='bottom', padx=5, pady=5)
 
-        button_frame = ctk.CTkFrame(self)
-        button_frame.pack(fill='both',expand=True)
+        # Frame for Left Side (Duplicate Viewer Window)
+        left_frame = ctk.CTkScrollableFrame(self, border_width=1)
+        left_frame.pack(fill='both',side='left', expand=True, padx=10, pady=10)
 
+        # Debugging function that prints the duplicates found to textbox (filepath, filename)
         def testSearch():
-            #interfaceSearch()
             print("Test Search == pressed")
             found_images_dict, found_filepaths_dict = interfaceSearch()
             
@@ -198,29 +205,40 @@ class SearchPage(ctk.CTkFrame):
             for value in found_filepaths_dict:
                 print(found_filepaths_dict[value])
                 test_output.insert("end", found_filepaths_dict[value])
+                test_output.insert("end", "\n\n")
             test_output.configure(state="disabled") # disable editing state after finished writing results
             # to-fix note: if user exits page after text insertion, text remains when visiting the page again
 
-        search_button = ctk.CTkButton(button_frame,
+        # Textbox for debugging display purposes
+        test_output = ctk.CTkTextbox(left_frame, state="disabled")
+        test_output.rowconfigure(0, weight=3)
+        test_output.grid(row=0,column=0,pady=5,padx=5)
+
+        # Frame for right box (Image Preview Window)
+        right_frame = ctk.CTkFrame(self,border_width=1)
+        right_frame.pack(fill="both", side='left', expand=True, padx=10, pady=10)
+
+        # Text button for search algo debugging
+        search_button = ctk.CTkButton(bottom_frame,
                                       text='TestSearch',
+                                      font=('Roboto', 15),
                                       command=testSearch)
+        #search_button.pack(side='bottom')
         search_button.grid(row=0,column=0,pady=5,padx=5)
 
+        # Exit function to return to homepage
         def exit():
             controller.show_frame('HomePage')
             print("Exit button pressed, returning to homepage")
+            # to-do: prompt user if they are sure they wish to go to homepage, wipe any texts, images displayed from the page
             
-        exit_button = ctk.CTkButton(button_frame,
+        # Exit button 
+        exit_button = ctk.CTkButton(bottom_frame,
                                     text='Exit',
+                                    font=('Roboto', 15),
                                     command=exit)
-        
-        exit_button.grid(row=1,column=0,pady=5,padx=5)
-
-        test_output = ctk.CTkTextbox(self,border_width=3, state="disabled")
-        test_output.pack(fill="both", side='bottom')
-        
-        #test_output = ctk.CTkTextbox(bottom_frame, state="disabled")
-        #test_output.grid(row=0,column=1,pady=5,padx=5)
+        #exit_button.pack(side='bottom')
+        exit_button.grid(row=0,column=1,pady=5,padx=5)
 
 if __name__ == "__main__":
     app = InitApp()
