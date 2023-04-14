@@ -6,8 +6,6 @@ from tkinter.filedialog import askdirectory # for GUI image prompt
 from PIL import Image, ImageStat # Pillow Library for Image Detection (prototype 1)
 import hashlib # for encoding unique hash ID's for scanned files
 
-#Tk().withdraw() # Do not display full GUI, avoid root directory 
-
 # Function that prompts user for working search directory
 def browseFolder():
     path = askdirectory(title="Select base folder to search") # prompt user for base folder to search
@@ -35,7 +33,8 @@ def uploadedFiles(uploaded_files):
 
 
 # Function to find duplicates
-# To-do thought: split function into two parts? one that returns full list of uploaded files w/ their hash keys. the other does actual duplicate comparison. 
+# To-do thought: split function into two parts. one that returns full list of uploaded files w/ their hash keys. the other does actual duplicate comparison. 
+#                for use with upload page/results page
 def searchDuplicates(path, walker, uniqueImages):
     for folder, sub_folder, files in walker:
         for file in files:
