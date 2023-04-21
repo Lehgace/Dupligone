@@ -203,6 +203,8 @@ class SearchPage(ctk.CTkFrame):
 
             test_output.configure(state="normal") # enable editing state of text box
             for value in found_filepaths_dict:
+                # Test Skeletal Code for displaying the images
+                # current_image = ctk.CTkImage(Image.open(r"[filepath]"), size=(100,100))
                 print(found_filepaths_dict[value])
                 test_output.insert("end", found_filepaths_dict[value])
                 test_output.insert("end", "\n\n")
