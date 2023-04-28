@@ -2,7 +2,7 @@
 
 import customtkinter as ctk
 from base2test import interfaceSearch, uploadedFiles
-#import os
+import os
 from PIL import Image # for use with displaying images
 
 # Initialize Desktop Application
@@ -189,8 +189,8 @@ class SearchPage(ctk.CTkFrame):
         bottom_frame.pack(fill="x", side='bottom', padx=5, pady=5)
 
         # Frame for Left Side (Duplicate Viewer Window)
-        left_frame = ctk.CTkScrollableFrame(self, border_width=1)
-        left_frame.pack(fill='both',side='left', expand=True, padx=10, pady=10)
+        left_frame = ctk.CTkScrollableFrame(self, border_width=1, width=600, height=500)
+        left_frame.pack(fill='both',side='left', padx=10, pady=10)
 
         # Debugging function that prints the duplicates found to textbox (filepath, filename)
         def testSearch():
@@ -213,12 +213,63 @@ class SearchPage(ctk.CTkFrame):
 
         # Textbox for debugging display purposes
         test_output = ctk.CTkTextbox(left_frame, state="disabled")
-        test_output.rowconfigure(0, weight=3)
-        test_output.grid(row=0,column=0,pady=5,padx=5)
+        test_output.grid(row=0,column=0,columnspan=4,pady=5,padx=5)
+
+        # Function to call for image preview
+        def show_in_preview(image, text):
+            print("Image has been clicked")
+            preview_image_button.configure(image=image, text=text)
+
+        # Declarations for image previews
+        preview_image = ctk.CTkImage(Image.open(r"C:\Users\theun\OneDrive\Documents\Dupligone\TestImages\AC2.jpg"), size=(500,350))
+        preview_image2 = ctk.CTkImage(Image.open(r"C:\Users\theun\OneDrive\Documents\Dupligone\TestImages\K3P.png"), size=(500,350))
+        preview_image3 = ctk.CTkImage(Image.open(r"C:\Users\theun\OneDrive\Documents\Dupligone\TestImages\R2.png"), size=(500,350))
+        preview_image4 = ctk.CTkImage(Image.open(r"C:\Users\theun\OneDrive\Documents\Dupligone\TestImages\Subfolder1\B2.jpg"), size=(500,350))
+        preview_image5 = ctk.CTkImage(Image.open(r"C:\Users\theun\OneDrive\Documents\Dupligone\TestImages\Subfolder2\D2.jpg"), size=(500,350))
+
+        # Prototype loading images    
+        test_image = ctk.CTkImage(Image.open(r"C:\Users\theun\OneDrive\Documents\Dupligone\TestImages\AC2.jpg"), size=(100,100))
+        test_image_button = ctk.CTkButton(left_frame, image=test_image, width=100, height=100, text='AC2.jpg', font=('Roboto',15), compound="top", fg_color="transparent", hover=True)
+        test_image_button.configure(command=lambda: show_in_preview(preview_image, test_image_button.cget("text")))
+        test_image_button.grid(row=1,column=0,pady=5,padx=5)
+        test_image2 = ctk.CTkImage(Image.open(r"C:\Users\theun\OneDrive\Documents\Dupligone\TestImages\K3P.png"), size=(100,100))
+        test_image2_button = ctk.CTkButton(left_frame, image=test_image2, width=100, height=100, text='K3P.png', font=('Roboto',15), compound="top", fg_color="transparent", hover=True)
+        test_image2_button.configure(command=lambda: show_in_preview(preview_image2, test_image2_button.cget("text")))
+        test_image2_button.grid(row=1,column=1,pady=5,padx=5)
+        test_image3 = ctk.CTkImage(Image.open(r"C:\Users\theun\OneDrive\Documents\Dupligone\TestImages\R2.png"), size=(100,100))
+        test_image3_button = ctk.CTkButton(left_frame, image=test_image3, width=100, height=100, text='R2.png', font=('Roboto',15), compound="top", fg_color="transparent", hover=True)
+        test_image3_button.configure(command=lambda: show_in_preview(preview_image3, test_image3_button.cget("text")))
+        test_image3_button.grid(row=1,column=2,pady=5,padx=5)
+        test_image4 = ctk.CTkImage(Image.open(r"C:\Users\theun\OneDrive\Documents\Dupligone\TestImages\Subfolder1\B2.jpg"), size=(100,100))
+        test_image4_button = ctk.CTkButton(left_frame, image=test_image4, width=100, height=100, text='B2.jpg', font=('Roboto',15), compound="top", fg_color="transparent", hover=True)
+        test_image4_button.configure(command=lambda: show_in_preview(preview_image4, test_image4_button.cget("text")))
+        test_image4_button.grid(row=1,column=3,pady=5,padx=5)
+        test_image5 = ctk.CTkImage(Image.open(r"C:\Users\theun\OneDrive\Documents\Dupligone\TestImages\Subfolder2\D2.jpg"), size=(100,100))
+        test_image5_button = ctk.CTkButton(left_frame, image=test_image5, width=100, height=100, text='D2.jpg', font=('Roboto',15), compound="top", fg_color="transparent", hover=True)
+        test_image5_button.configure(command=lambda: show_in_preview(preview_image5, test_image5_button.cget("text")))
+        test_image5_button.grid(row=2,column=0,pady=5,padx=5)
 
         # Frame for right box (Image Preview Window)
-        right_frame = ctk.CTkFrame(self,border_width=1)
-        right_frame.pack(fill="both", side='left', expand=True, padx=10, pady=10)
+        right_frame = ctk.CTkFrame(self,border_width=1, width=600, height=500)
+        right_frame.pack(fill="both", side='left',  expand=True, padx=10, pady=10)
+
+        # Function to call for image preview
+        preview_image = ctk.CTkImage(Image.open(r"C:\Users\theun\OneDrive\Documents\Dupligone\TestImages\AC2.jpg"), size=(500,350))
+        preview_image_button = ctk.CTkButton(right_frame, image=preview_image, width=500, height=350, text='AC2.jpg', font=('Roboto',15), compound="top", fg_color="transparent", hover=True)
+        preview_image_button.grid(row=0,column=0,columnspan=4,pady=5,padx=5)
+        
+        
+
+
+        # delete, rename, move, compare related
+        delete_button = ctk.CTkButton(right_frame, text='Delete', font=('Roboto',15), fg_color="#7E191B")
+        delete_button.grid(row=1,column=0,pady=5,padx=5)
+        rename_button = ctk.CTkButton(right_frame, text='Rename', font=('Roboto',15))
+        rename_button.grid(row=1,column=1,pady=5,padx=5)
+        move_button = ctk.CTkButton(right_frame, text='Move', font=('Roboto',15))
+        move_button.grid(row=1,column=2,pady=5,padx=5)
+        compare_button = ctk.CTkButton(right_frame, text='Compare Related', font=('Roboto',15), fg_color="#1338BE")
+        compare_button.grid(row=1,column=3,pady=5,padx=5)
 
         # Text button for search algo debugging
         search_button = ctk.CTkButton(bottom_frame,
