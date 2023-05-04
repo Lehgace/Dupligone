@@ -220,6 +220,7 @@ class SearchPage(ctk.CTkFrame):
             print("Image has been clicked")
             preview_image_button.configure(image=image, text=text)
 
+
         # Declarations for image previews
         preview_image = ctk.CTkImage(Image.open(r"C:\Users\theun\OneDrive\Documents\Dupligone\TestImages\AC2.jpg"), size=(500,350))
         preview_image2 = ctk.CTkImage(Image.open(r"C:\Users\theun\OneDrive\Documents\Dupligone\TestImages\K3P.png"), size=(500,350))
@@ -258,17 +259,91 @@ class SearchPage(ctk.CTkFrame):
         preview_image_button = ctk.CTkButton(right_frame, image=preview_image, width=500, height=350, text='AC2.jpg', font=('Roboto',15), compound="top", fg_color="transparent", hover=True)
         preview_image_button.grid(row=0,column=0,columnspan=4,pady=5,padx=5)
         
-        
+        # Function to delete image; tested with Image 5 D2.png
+        def delete_image(file_path):
+            #os.remove(file_path)
+            print(file_path)
+            print(f"{file_path} has been deleted")
+            test_image5_button.grid_forget()
 
+
+        #Top Level rename prototype; tested with K3P.png
+        class RenameWindow(ctk.CTkToplevel):
+            def __init__(self, *args, **kwargs):
+                super().__init__(*args, **kwargs)
+                self.geometry("400x300")
+
+                def submit_name():
+                    new_name = self.entry.get()
+                    print(new_name)
+                    test_image2_button.configure(text=new_name)
+                    self.deiconify()
+                    
+                self.entry = ctk.CTkEntry(self, placeholder_text="Enter new name")
+                self.entry.pack(padx=20)
+                self.submit_button = ctk.CTkButton(self, text="Submit", command=submit_name)
+                self.submit_button.pack(padx=20)
+
+         
+        
+        # Function to open top level window for rename
+        def open_renamelevel(self):
+            if self.toplevel_window is None or not self.toplevel_window.winfo_exists():
+                self.toplevel_window = RenameWindow(self)  # create window if its None or destroyed
+            else:
+                self.toplevel_window.focus()  # if window exists focus it
+
+        #Top Level Compare Related prototype; tested with D1.png and D2.png
+        class CompareWindow(ctk.CTkToplevel):
+            def __init__(self, *args, **kwargs):
+                super().__init__(*args, **kwargs)
+                self.geometry("1280x720")
+
+                # Header Label for Dupligone Logo
+                compare_head_label = ctk.CTkLabel(self,
+                                     text='Preview',
+                                     font=('Roboto',20,'bold'))
+                compare_head_label.pack(pady=25)
+
+                # Frame for Left Side (Duplicate Viewer Window)
+                left_compare_frame = ctk.CTkFrame(self, border_width=1, width=600, height=500)
+                left_compare_frame.pack(fill='both',side='left', expand=True, padx=10, pady=10)
+
+                left_image = ctk.CTkImage(Image.open(r"C:\Users\theun\OneDrive\Documents\Dupligone\TestImages\AC1.jpg"), size=(500,350))
+                left_image_button = ctk.CTkButton(left_compare_frame, image=left_image, width=500, height=350, text='AC1.jpg', font=('Roboto',15), compound="top", fg_color="transparent", hover=True)
+                left_image_button.grid(row=0,column=0,columnspan=4,pady=5,padx=5)
+
+                # Frame for right box (Image Preview Window)
+                right_compare_frame = ctk.CTkFrame(self,border_width=1, width=600, height=500)
+                right_compare_frame.pack(fill="both", side='left',  expand=True, padx=10, pady=10) 
+
+                right_image = ctk.CTkImage(Image.open(r"C:\Users\theun\OneDrive\Documents\Dupligone\TestImages\AC2.jpg"), size=(500,350))
+                right_image_button = ctk.CTkButton(right_compare_frame, image=right_image, width=500, height=350, text='AC2.jpg', font=('Roboto',15), compound="top", fg_color="transparent", hover=True)
+                right_image_button.grid(row=0,column=0,columnspan=4,pady=5,padx=5)
+                #self.entry = ctk.CTkEntry(self, placeholder_text="Enter new name")
+                #self.entry.pack(padx=20)
+
+        # Function to open top level window for compare related
+        def open_comparelevel(self):
+            if self.toplevel_window is None or not self.toplevel_window.winfo_exists():
+                self.toplevel_window = CompareWindow(self)  # create window if its None or destroyed
+            else:
+                self.toplevel_window.focus()  # if window exists focus it
+
+        # Set no top level window active
+        self.toplevel_window = None
 
         # delete, rename, move, compare related
         delete_button = ctk.CTkButton(right_frame, text='Delete', font=('Roboto',15), fg_color="#7E191B")
+        delete_button.configure(command=lambda: delete_image(r"C:\Users\theun\OneDrive\Documents\Dupligone\TestImages\Subfolder2\D2.jpg")) # test to delete last image D2.png
         delete_button.grid(row=1,column=0,pady=5,padx=5)
         rename_button = ctk.CTkButton(right_frame, text='Rename', font=('Roboto',15))
+        rename_button.configure(command=lambda: open_renamelevel(self))
         rename_button.grid(row=1,column=1,pady=5,padx=5)
         move_button = ctk.CTkButton(right_frame, text='Move', font=('Roboto',15))
         move_button.grid(row=1,column=2,pady=5,padx=5)
         compare_button = ctk.CTkButton(right_frame, text='Compare Related', font=('Roboto',15), fg_color="#1338BE")
+        compare_button.configure(command=lambda: open_comparelevel(self))
         compare_button.grid(row=1,column=3,pady=5,padx=5)
 
         # Text button for search algo debugging
@@ -290,7 +365,6 @@ class SearchPage(ctk.CTkFrame):
                                     text='Exit',
                                     font=('Roboto', 15),
                                     command=exit)
-        #exit_button.pack(side='bottom')
         exit_button.grid(row=0,column=1,pady=5,padx=5)
 
 if __name__ == "__main__":
