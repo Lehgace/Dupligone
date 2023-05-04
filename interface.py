@@ -1,7 +1,7 @@
 # Joshua Erickson | CPSC 491 | Dupligone GUI Homescreen Test using CustomTkinter
 
 import customtkinter as ctk
-from base2test import interfaceSearch, uploadedFiles
+from search import interfaceSearch, uploadedFiles
 import os
 from PIL import Image # for use with displaying images
 
