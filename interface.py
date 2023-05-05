@@ -88,7 +88,6 @@ class HomePage(ctk.CTkFrame):
 class UploadPage(ctk.CTkFrame):
     # Page split into two sections (boxes). Left box contains browse folder button, right box contains preview of uploaded filepaths
         # may need to implement function that shows browse folders
-
     def __init__(self, parent, controller):
         ctk.CTkFrame.__init__(self, parent)
         self.controller = controller
@@ -115,8 +114,9 @@ class UploadPage(ctk.CTkFrame):
                 right_frame.insert("end", "\n")
             right_frame.configure(state="disabled") # enable editing state of text box
 
-        search_button = ctk.CTkButton(left_frame, text='Browse', font=('Roboto',20), command=pressedBrowse)
-        search_button.pack(side='bottom', pady=25)
+        # Search button to prompt for upload files
+        browse_button = ctk.CTkButton(left_frame, text='Browse', font=('Roboto',20), command=pressedBrowse)
+        browse_button.pack(side='bottom', pady=25)
 
         # Textbox Frame for right box
         right_frame = ctk.CTkTextbox(self,border_width=3, state="disabled", font=('Roboto',16))
@@ -242,7 +242,6 @@ class SearchPage(ctk.CTkFrame):
             print(f"{file_path} has been deleted")
             test_image5_button.grid_forget()
 
-
         #Top Level rename prototype; tested with K3P.png
         class RenameWindow(ctk.CTkToplevel):
             def __init__(self, *args, **kwargs):
@@ -259,9 +258,6 @@ class SearchPage(ctk.CTkFrame):
                 self.entry.pack(padx=20)
                 self.submit_button = ctk.CTkButton(self, text="Submit", command=submit_name)
                 self.submit_button.pack(padx=20)
-
-         
-        
         # Function to open top level window for rename
         def open_renamelevel(self):
             if self.toplevel_window is None or not self.toplevel_window.winfo_exists():
